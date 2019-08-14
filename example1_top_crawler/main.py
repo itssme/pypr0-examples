@@ -48,4 +48,4 @@ manager.safe_to_disk()
 print manager.manual_command("select id, up-down, user"
                              "  from posts"
                              " where up-down > 300;", wait=True)
-
+manager.sql_connection.close()
