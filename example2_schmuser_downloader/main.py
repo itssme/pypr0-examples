@@ -5,17 +5,19 @@ Downloads the image url of all posts tagged with "schmuserkadser" which appeared
 from pr0gramm import *
 from pr0gramm import sql_manager
 import time
-import urllib
+import urllib.request
 
 api = Api()
 schmuser_posts = Posts()
 
+print("Crawling all posts with the tag 'schmuserkadser'")
+
 for posts in api.get_items_by_tag_iterator(tags="schmuserkadser", promoted=1):
     schmuser_posts.extend(posts)
     time.sleep(0.1)
-    print "crawling -> " + str(len(schmuser_posts)) + " posts"
+    print("crawling -> " + str(len(schmuser_posts)) + " posts")
 
-print "Found a total of " + str(len(schmuser_posts)) + " schmuserkadser posts"
+print("Found a total of " + str(len(schmuser_posts)) + " schmuserkadser posts")
 
 # for demo purposes the posts are now saved to the database
 # and then a select statement retrieves the image or video url of the posts
@@ -26,17 +28,17 @@ database.insert_posts(schmuser_posts)
 database.safe_to_disk()
 
 posts = [(url[0], url[1]) for url in database.manual_command("select id, image from posts order by id desc;", wait=True)]
-print posts
+print(posts)
 
-print "[!] press CTRL-C if you want to stop the downloads"
+print("[!] press CTRL-C if you want to stop the downloads")
 
 try:
     for id, url in posts:
-        print "downloading post -> " + str(id)
+        print("downloading post -> " + str(id))
         if url.endswith(".mp4"):
-            urllib.urlretrieve("https://vid.pr0gramm.com/" + url, os.path.join(os.getcwd(), str(id) + "." + url.split(".")[-1]))
+            urllib.request.urlretrieve("https://vid.pr0gramm.com/" + url, os.path.join(os.getcwd(), str(id) + "." + url.split(".")[-1]))
         else:
-            urllib.urlretrieve("https://img.pr0gramm.com/" + url, os.path.join(os.getcwd(), str(id) + "." + url.split(".")[-1]))
+            urllib.request.urlretrieve("https://img.pr0gramm.com/" + url, os.path.join(os.getcwd(), str(id) + "." + url.split(".")[-1]))
 except KeyboardInterrupt:
-    print "[!] interrupt, closing db connection"
+    print("[!] interrupt, closing db connection")
     database.sql_connection.close()
