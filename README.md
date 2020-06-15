@@ -42,7 +42,7 @@ Post(api.get_newest_image()).keys()
 
 ### Getting id of newest post from Post() object
 ```python
-Post(api.get_newest_image()).keys()["id"]
+Post(api.get_newest_image())["id"]
 >> 1234566789
 ```
 
