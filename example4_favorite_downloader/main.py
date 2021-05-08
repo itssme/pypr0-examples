@@ -32,7 +32,7 @@ favorite_posts = Posts()
 
 logging.info("Started crawling")
 
-for posts in api.get_collection_items_iterator(flag=api.calculate_flag(sfw=True, nsfp=True, nsfw=True, nsfl=True)):
+for posts in api.get_collection_items_iterator(user=username, flag=api.calculate_flag(sfw=True, nsfp=True, nsfw=True, nsfl=True)):
     favorite_posts.extend(posts)
     time.sleep(0.2)
     logging.info("crawling -> got total of " + str(len(favorite_posts)) + " posts")
